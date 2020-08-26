@@ -144,9 +144,10 @@ detailInfo = "Display color depth: " + screen.colorDepth + '<br>'
              + "Dolby Vision: " + MediaSource.isTypeSupported('video/mp4; codecs="dvhe"') + '<br>'
              + "HEVC Playback: " + MediaSource.isTypeSupported('video/mp4; codecs="hvc1"') + '<br>'
              + "Dolby Digital Plus Playback: " + MediaSource.isTypeSupported('video/mp4;codecs="ec-3"') + '<br>'
-             + navigator.userAgent;
+             + "YouTube 4K Support: " + MediaSource.isTypeSupported('video/webm; codecs="vp09.02.10.10.01.09.16.09.01"') + '<br>'
+             
 
-document.write(detailInfo + '</div>')
+document.write('<h2>Additional Info </h2>' + '<h3> Device: ' + navigator.userAgent + '</h3>' + detailInfo + '</div>')
 
 
 document.getElementById('tryit').addEventListener('click', mc.tryit);
