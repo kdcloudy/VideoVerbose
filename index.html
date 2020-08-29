@@ -3,26 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <title>VideoVerbose</title>
 </head>
-<style>
-    body{
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-        line-height: 2;
-    }
-
-    .container{
-      margin: 100px auto;
-      max-width: 960px;
-    }
-
-    select{
-      font-size: large;
-    }
-</style>
 <body>
   <div class = "container">
-    <h1>Media Capabilities Test</h1>
+    <h1>VideoVerbose</h1><div class="toggle-container">
+ 
+  </div>
+    <p>This tool will allow you to check, verify the different playback capabilities of your browser, like HDR, Dolby Audio, and performance for different codecs at resolutions upto 8K.</p>
+    <p>Developed by <a href="https://www.youtube.com/kdcloudy">@kdcloudy</a></p>
+    <div id = "basicInfo">
+
+    </div>
+
+   <h2>Performance:</h2>
     <form>
         <p>Select your video configuration and find out if this browser supports the codec, 
         and whether decoding will be smooth and power efficient:</p>
@@ -59,27 +54,15 @@
               <option>2500</option>
               <option>800</option>
             </select>
-          </li>
-          <li>
-            <label for="HDR">Select a HDR config</label>
-            <select id="HDRType">
-              <option selected>pq</option>
-              <option>hlg</option>
-              <option>srgb</option>
-              <option>x</option>
-            </select>
-            <select id="HDRMetaType">
-              <option value = "smpteSt2094-10" selected>Dynamic (HDR10+/Dolby Vision)</option>
-              <option value = "smpteSt2086" selected>Static (HDR10)</option>
-            </select>
-          </li>
-          </ul>
-          <p><input type="button" value="Test this Video Configuration" id="tryit"></p>
+          </li> </ul>
+          <p><input type="button" class="button" value="Test this Video Configuration" id="tryit"></p>
+  
         </form> 
         
         <ul id="results"></ul>
 
-      
+    
+  
     
 </body>
 
@@ -102,7 +85,6 @@
         height: size[1],
         bitrate: document.getElementById('bitrate').value,
         framerate: document.getElementById('framerate').value,
-        TransferFunction: document.getElementById('HDRType').value
         
       }
     }
@@ -112,12 +94,15 @@
     let content = '';
     navigator.mediaCapabilities.decodingInfo(mc.videoConfiguration).then(result => { 
       var li = document.createElement('li'),
-        mcv = mc.videoConfiguration.video;
-      content = 'A ' + mcv.width + 'x' + mcv.height + ', ' + mcv.contentType + ' in HDR' + ' at ' +
+      mcv = mc.videoConfiguration.video;
+      if(navigator.userAgent.indexOf('Mac OS X 11') != -1 && mcv.contentType=='video/webm;codecs=vp09.02.10.10.01.09.16.09.01'){
+          content = 'A ' + mcv.width + 'x' + mcv.height + ', ' + mcv.contentType + ' at ' + mcv.framerate  + 'fps and ' +  mcv.bitrate + ' bps video ' + 'is supported, is smooth, and is power efficient.'
+      } else {
+        content = 'A ' + mcv.width + 'x' + mcv.height + ', ' + mcv.contentType + ' at ' +
         mcv.framerate  + 'fps and ' +  mcv.bitrate + ' bps video ' +
-        (result.supported ? ' IS ' : 'IS NOT ') + ' supported, ' +
-        (result.smooth ? ' IS ' : ' is NOT ') + ' smooth, and' +
-        (result.powerEfficient ? ' IS ' : ' IS NOT ') + 'power efficient.';
+        (result.supported ? ' is ' : 'is NOT ') + ' supported, ' +
+        (result.smooth ? ' is ' : ' is NOT ') + ' smooth, and' +
+        (result.powerEfficient ? ' is ' : ' is NOT ') + 'power efficient.'; }
       var ul = document.getElementById("results")
       li.innerHTML = content;
       ul.appendChild(li);
@@ -130,24 +115,54 @@
   }
 }
 
-// Detect if display is in HDR mode and if browser supports VP9 HDR.
-function canPlayVp9Hdr() {
-// TODO: Adjust VP9 codec string based on your video encoding properties.
-return (window.matchMedia('(color-gamut: p3)').matches &&
-    screen.colorDepth >= 48)
-     //&& MediaSource.isTypeSupported('video/webm; codecs="vp09.02.10.10.01.09.16.09.01"'))
+
+
+
+
+var HDRSupport, DVSupport, DDPSupport, VP9Support;
+
+//Checking for Dolby Vision support
+if (MediaSource.isTypeSupported('video/mp4; codecs="dvhe"') == true ){
+    DVSupport= 'Supported'
+} else {
+    DVSupport='Unsupported'
 }
 
+//Checking for HDR Support
+if (window.matchMedia('(color-gamut: p3)').matches == true ){
+    HDRSupport = "Your screen has wide color, you'll be able to watch tonemapped HDR video"
+} else if (window.matchMedia('(dynamic-range: high)').matches == true) {
+  HDRSupport = "Your screen has true HDR support"
+} else {
+  HDRSupport = "HDR is unsupported"
+}
+
+if (MediaSource.isTypeSupported('video/mp4;codecs="ec-3"')==true){
+      DDPSupport='Supported'
+} else if (navigator.userAgent.indexOf('Mac OS X 10_15') != -1 && navigator.userAgent.indexOf('Chrome') != -1 ) {
+      DDPSupport='Unsupported' 
+} else if (navigator.userAgent.indexOf('Mac OS X 10_15') != -1 && navigator.userAgent.indexOf('Safari') != -1 ){
+      DDPSupport='Supported <br> Dolby Atmos: Supported'
+} else if (navigator.userAgent.indexOf('Edge') != -1 ) {
+      DDPSupport='Supported <br> Dolby Atmos: Supported'
+} else {
+    DDPSupport = 'Unsupported'
+}
+
+if(MediaSource.isTypeSupported('video/webm; codecs="vp09.02.10.10.01.09.16.09.01"')==true){
+  VP9Support='Supported'
+} else {
+  VP9Support='Unsupported'
+}
 
 let detailInfo = '';
-detailInfo = "Display color depth: " + screen.colorDepth + '<br>'
-             + "Dolby Vision: " + MediaSource.isTypeSupported('video/mp4; codecs="dvhe"') + '<br>'
-             + "HEVC Playback: " + MediaSource.isTypeSupported('video/mp4; codecs="hvc1"') + '<br>'
-             + "Dolby Digital Plus Playback: " + MediaSource.isTypeSupported('video/mp4;codecs="ec-3"') + '<br>'
-             + "YouTube 4K Support: " + MediaSource.isTypeSupported('video/webm; codecs="vp09.02.10.10.01.09.16.09.01"') + '<br>'
+detailInfo = "HDR Video Playback: " + HDRSupport +  '<br>'
+             + "Dolby Vision Support: " + DVSupport + '<br>'
+             + "Dolby Digital Plus Support: " + DDPSupport + '<br>'
+             + "YouTube 4K Support: " + VP9Support + '<br>'
              
 
-document.write('<h2>Additional Info </h2>' + '<h3> Device: ' + navigator.userAgent + '</h3>' + detailInfo + '</div>')
+document.getElementById('basicInfo').innerHTML = '<h2>Basic Info: </h2>' + '<h3> Device: ' + navigator.userAgent + '</h3>' + detailInfo + '</div>'
 
 
 document.getElementById('tryit').addEventListener('click', mc.tryit);
