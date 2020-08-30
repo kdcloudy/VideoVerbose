@@ -129,10 +129,10 @@ if (MediaSource.isTypeSupported('video/mp4; codecs="dvhe"') == true ){
 }
 
 //Checking for HDR Support
-if (window.matchMedia('(color-gamut: p3)').matches == true ){
+if (window.matchMedia('(dynamic-range: high)').matches == true) {
+  HDRSupport = "Your screen is HDR supported"
+} else if (window.matchMedia('(color-gamut: p3)').matches == true ){
     HDRSupport = "Your screen has wide color, you'll be able to watch tonemapped HDR video"
-} else if (window.matchMedia('(dynamic-range: high)').matches == true) {
-  HDRSupport = "Your screen has true HDR support"
 } else {
   HDRSupport = "HDR is unsupported"
 }
