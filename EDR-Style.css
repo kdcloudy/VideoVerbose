@@ -9,8 +9,8 @@ a {
 }
 
 .box {
-  padding-top: 50px;
-  padding-left: 550px;
+  padding-top: 100px;
+  padding-left: 30%;
 }
 
 /* .EDR-Logo {
@@ -51,5 +51,9 @@ a {
   .box {
     padding-top: 50px;
     padding-left: 50px;
+  }
+
+  #EDR-Logo {
+    width: 300px;
   }
 }

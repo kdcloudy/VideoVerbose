@@ -9,8 +9,8 @@ a {
 }
 
 .container {
-  padding: 150px 300px;
-  max-width: 900px;
+  padding: 50px 100px;
+  /* max-width: 500px; */
 }
 
 select {
