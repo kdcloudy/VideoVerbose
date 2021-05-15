@@ -13,11 +13,6 @@ a {
   padding-left: 30%;
 }
 
-/* .EDR-Logo {
-  margin-left: 25%;
-  margin-right: 25%;
-} */
-
 #EDR-element {
   padding: 100px;
   font-weight: 900;
@@ -49,11 +44,11 @@ a {
 
 @media screen and (max-width: 720px) {
   .box {
-    padding-top: 50px;
-    padding-left: 50px;
+    padding-top: 10px;
+    padding-left: 10px;
   }
 
   #EDR-Logo {
-    width: 300px;
+    width: 250px;
   }
 }
