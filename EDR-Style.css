@@ -24,7 +24,7 @@ a {
 
 @supports (-webkit-backdrop-filter: blur(0)) {
   #EDR-element {
-    filter: brightness(10);
+    filter: brightness(1);
     -webkit-backdrop-filter: brightness(1);
   }
 }
